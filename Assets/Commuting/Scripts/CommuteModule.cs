@@ -274,6 +274,7 @@ public class CommuteModule : MonoBehaviour {
                         if(check != -1) {
                             FormatAndLog(buttonIndex + " pressed. Correct!");
                         }
+                        FormatAndLog("Stage two completed, module disarmed.");
                         Module.HandlePass();
                         isActive = false;
                         return;
