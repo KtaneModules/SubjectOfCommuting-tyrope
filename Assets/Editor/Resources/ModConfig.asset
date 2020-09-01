@@ -14,7 +14,8 @@ MonoBehaviour:
   id: commuting
   title: Commuting
   author: Tyrope
-  description: Go to work, and back.
+  description: Getting to and from work is a fairly mundane choice, until making the
+    wrong choice has larger consequences than simply missing a meeting.
   version: 0.0.1
   outputFolder: build
   previewImage: {fileID: 0}

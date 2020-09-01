@@ -2,15 +2,15 @@
   "Author": "Tyrope",
   "Compatibility": "Untested",
   "DefuserDifficulty": "VeryEasy",
-  "Description": null,
+  "Description": "Getting to and from work is a fairly mundane choice, until making the wrong choice has larger consequences than simply missing a meeting.",
   "ExpertDifficulty": "VeryEasy",
   "ModuleID": "commuting",
   "Name": "Commuting",
   "Origin": "Mods",
-  "Published": "9999-12-31",
+  "Published": "2020-09-01",
   "SortKey": "COMMUTING",
-  "SteamID": null,
+  "SourceUrl": "https://github.com/tyrope/SubjectOfCommuting",
+  "SteamID": "0",
   "Symbol": "Cmt",
   "Type": "Regular"
 }
-
