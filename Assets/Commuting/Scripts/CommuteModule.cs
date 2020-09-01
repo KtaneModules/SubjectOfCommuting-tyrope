@@ -1,5 +1,6 @@
 ﻿using KModkit;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 public class CommuteModule : MonoBehaviour {
 
@@ -107,7 +108,7 @@ public class CommuteModule : MonoBehaviour {
         }
         
         if(assignedButtons.Contains(CommuteMethod.walk)) {
-            FormatAndLog("Stage 1: last ditch, walk. Button " + assignedButtons.IndexOf(CommuteMethod.walk));
+            FormatAndLog("Stage 1: Walk to work. Button " + assignedButtons.IndexOf(CommuteMethod.walk));
             return assignedButtons.IndexOf(CommuteMethod.walk);
         }
 
@@ -121,7 +122,7 @@ public class CommuteModule : MonoBehaviour {
     /// <returns>Button index, English reading order.</returns>
     private int CheckStage2Solution() {
         // Check serial number for the direction.
-        List<int> SerialNumerals = (List<int>) BombInfo.GetSerialNumberNumbers();
+        List<int> SerialNumerals = BombInfo.GetSerialNumberNumbers().ToList();
         if(SerialNumerals[SerialNumerals.Count - 1] < 6) {
             return CheckStage2Reverse();
         } else {
@@ -228,6 +229,7 @@ public class CommuteModule : MonoBehaviour {
         if(minutes % 2 == 0) {
             ret++;
         }
+        FormatAndLog("None of the rules applied, so press button " + ret);
         return ret;
     }
 
@@ -247,17 +249,21 @@ public class CommuteModule : MonoBehaviour {
                     stage1solution = CheckStage1Solution();
                     if(buttonIndex == stage1solution) {
                         stage++;
+                        FormatAndLog("Correct!");
                         return;
                     }
+                    FormatAndLog(buttonIndex + " is not correct. Strike!");
                     Module.HandleStrike();
                     return;
                 case 2:
                     int check = CheckStage2Solution();
                     if(check == -1 || buttonIndex == check) {
+                        FormatAndLog("Correct!");
                         Module.HandlePass();
                         isActive = false;
                         return;
                     }
+                    FormatAndLog(buttonIndex + " is not correct. Strike!");
                     Module.HandleStrike();
                     return;
                 default:
