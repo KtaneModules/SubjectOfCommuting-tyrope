@@ -124,8 +124,10 @@ public class CommuteModule : MonoBehaviour {
         // Check serial number for the direction.
         List<int> SerialNumerals = BombInfo.GetSerialNumberNumbers().ToList();
         if(SerialNumerals[SerialNumerals.Count - 1] < 6) {
+            FormatAndLog("Stage 2: Last number in serial is low, check in reverse.");
             return CheckStage2Reverse();
         } else {
+            FormatAndLog("Stage 2: Last number in serial is high, check as written.");
             return CheckStage2Normal();
         }
     }
@@ -139,17 +141,20 @@ public class CommuteModule : MonoBehaviour {
         if(assignedButtons.Contains(CommuteMethod.walk)
             && assignedButtons.Contains(CommuteMethod.cycle)
             && stage1solution == assignedButtons.IndexOf(CommuteMethod.walk)) {
+            FormatAndLog("Getting that exercise! Cycle home. Button " + assignedButtons.IndexOf(CommuteMethod.cycle));
             return assignedButtons.IndexOf(CommuteMethod.cycle);
         }
 
         // If you drove to work, take the car back.
         if(assignedButtons.Contains(CommuteMethod.car)
            && stage1solution == assignedButtons.IndexOf(CommuteMethod.car)) {
+            FormatAndLog("We drove to work, driving back from parking lot " + assignedButtons.IndexOf(CommuteMethod.car));
             return stage1solution;
         }
 
         //Otherwise, go by train.
         if(assignedButtons.Contains(CommuteMethod.train)) {
+            FormatAndLog("We didn't drive to work, taking train " + assignedButtons.IndexOf(CommuteMethod.train));
             return assignedButtons.IndexOf(CommuteMethod.train);
         }
 
@@ -157,6 +162,7 @@ public class CommuteModule : MonoBehaviour {
         if(assignedButtons.Contains(CommuteMethod.bus)
            && stage1solution == assignedButtons.IndexOf(CommuteMethod.bus)
            && assignedButtons.Contains(CommuteMethod.walk)) {
+            FormatAndLog("We took the bus to work, walking home with button " + assignedButtons.IndexOf(CommuteMethod.bus));
             return assignedButtons.IndexOf(CommuteMethod.walk);
         }
 
@@ -165,6 +171,7 @@ public class CommuteModule : MonoBehaviour {
            && stage1solution == assignedButtons.IndexOf(CommuteMethod.train)
            && BombInfo.GetTime() > 300f
            && assignedButtons.Contains(CommuteMethod.bus)) {
+            FormatAndLog("We have a train ticket and there's more than 5 minutes left, ride the bus on button " + assignedButtons.IndexOf(CommuteMethod.bus));
             return assignedButtons.IndexOf(CommuteMethod.bus);
         }
         return CheckImportantSection();
@@ -180,6 +187,7 @@ public class CommuteModule : MonoBehaviour {
            && stage1solution == assignedButtons.IndexOf(CommuteMethod.train)
            && BombInfo.GetTime() > 300f
            && assignedButtons.Contains(CommuteMethod.bus)) {
+            FormatAndLog("We have a train ticket and there's more than 5 minutes left, ride the bus on button " + assignedButtons.IndexOf(CommuteMethod.bus));
             return assignedButtons.IndexOf(CommuteMethod.bus);
         }
         
@@ -187,16 +195,19 @@ public class CommuteModule : MonoBehaviour {
         if(assignedButtons.Contains(CommuteMethod.bus)
            && stage1solution == assignedButtons.IndexOf(CommuteMethod.bus)
            && assignedButtons.Contains(CommuteMethod.walk)) {
+            FormatAndLog("We took the bus to work, walking home with button " + assignedButtons.IndexOf(CommuteMethod.walk));
             return assignedButtons.IndexOf(CommuteMethod.walk);
         }
         
         // If you drove to work, take the car back.
         if(assignedButtons.Contains(CommuteMethod.car) && stage1solution == assignedButtons.IndexOf(CommuteMethod.car)) {
+            FormatAndLog("We drove to work, driving back from parking lot " + assignedButtons.IndexOf(CommuteMethod.car));
             return stage1solution;
         }
         
         //Otherwise, go by train.
         if(assignedButtons.Contains(CommuteMethod.train)) {
+            FormatAndLog("We didn't drive to work, taking train " + assignedButtons.IndexOf(CommuteMethod.train));
             return assignedButtons.IndexOf(CommuteMethod.train);
         }
         
@@ -204,6 +215,7 @@ public class CommuteModule : MonoBehaviour {
         if(assignedButtons.Contains(CommuteMethod.walk)
            && assignedButtons.Contains(CommuteMethod.cycle)
            && stage1solution == assignedButtons.IndexOf(CommuteMethod.walk)) {
+            FormatAndLog("Getting that exercise! Cycle home. Button "+assignedButtons.IndexOf(CommuteMethod.cycle));
             return assignedButtons.IndexOf(CommuteMethod.cycle);
         }
         
@@ -242,28 +254,31 @@ public class CommuteModule : MonoBehaviour {
     private void ButtonPress(int buttonIndex ) {
         GetComponent<KMAudio>().PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.ButtonPress, transform);
         GetComponent<KMSelectable>().AddInteractionPunch();
-
+        int check;
         if(isActive) {
             switch(stage) {
                 case 1:
-                    stage1solution = CheckStage1Solution();
-                    if(buttonIndex == stage1solution) {
+                    check = CheckStage1Solution();
+                    if(buttonIndex == check) {
                         stage++;
-                        FormatAndLog("Correct!");
+                        FormatAndLog(buttonIndex + " pressed. Correct!");
+                        stage1solution = check;
                         return;
                     }
-                    FormatAndLog(buttonIndex + " is not correct. Strike!");
+                    FormatAndLog(buttonIndex + " pressed, expected " + stage1solution + ". Incorrect. Strike!");
                     Module.HandleStrike();
                     return;
                 case 2:
-                    int check = CheckStage2Solution();
+                    check = CheckStage2Solution();
                     if(check == -1 || buttonIndex == check) {
-                        FormatAndLog("Correct!");
+                        if(check != -1) {
+                            FormatAndLog(buttonIndex + " pressed. Correct!");
+                        }
                         Module.HandlePass();
                         isActive = false;
                         return;
                     }
-                    FormatAndLog(buttonIndex + " is not correct. Strike!");
+                    FormatAndLog(buttonIndex + " pressed, expected " + check + ". Incorrect. Strike!");
                     Module.HandleStrike();
                     return;
                 default:
