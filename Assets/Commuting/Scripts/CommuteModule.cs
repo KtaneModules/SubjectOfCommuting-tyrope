@@ -218,7 +218,7 @@ public class CommuteModule : MonoBehaviour {
         //Important: If at any point in time none of the rules apply, press the top left* button
         int ret = 0;
         //unless the serial number has a vowel in it, then press the bottom left* button.
-        List<char> vowels = new List<char> { 'a', 'e', 'i', 'o', 'u' };
+        List<char> vowels = new List<char> { 'A', 'E', 'I', 'O', 'U' };
         foreach(char c in BombInfo.GetSerialNumberLetters()) {
             if(vowels.Contains(c)) {
                 ret = 2;

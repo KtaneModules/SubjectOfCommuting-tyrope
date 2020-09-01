@@ -152,20 +152,9 @@ Prefab:
       propertyPath: m_RootOrder
       value: 2
       objectReference: {fileID: 0}
-    - target: {fileID: 114159108080258724, guid: 3a35731387d8e9d48adbc7403dc16641,
-        type: 2}
-      propertyPath: BombInfo
-      value: 
-      objectReference: {fileID: 259503130}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 3a35731387d8e9d48adbc7403dc16641, type: 2}
   m_IsPrefabParent: 0
---- !u!114 &259503130 stripped
-MonoBehaviour:
-  m_PrefabParentObject: {fileID: 114310963981725470, guid: 3a35731387d8e9d48adbc7403dc16641,
-    type: 2}
-  m_PrefabInternal: {fileID: 259503129}
-  m_Script: {fileID: 2144496390, guid: 45b809be76fd7a3468b6f517bced6f28, type: 3}
 --- !u!1 &1694639417
 GameObject:
   m_ObjectHideFlags: 0
