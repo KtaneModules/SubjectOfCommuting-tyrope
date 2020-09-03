@@ -7,6 +7,9 @@ public class CommuteModule : MonoBehaviour {
     public KMBombInfo BombInfo;
     public KMBombModule Module;
     public KMSelectable[] Buttons;
+    public GameObject[] LEDs;
+    public Texture[] ButtonTextures;
+    public Texture[] LedTextures;
 
     private int stage = 0;
     private int stage1solution;
@@ -15,16 +18,7 @@ public class CommuteModule : MonoBehaviour {
     private enum CommuteMethod { walk, cycle, car, bus, train };
     private readonly int numDiffMethods = System.Enum.GetValues(typeof(CommuteMethod)).Length;
 
-    //TODO switch from single-character strings to proper materials.
-    private static readonly Dictionary<CommuteMethod, string> materialMap = new Dictionary<CommuteMethod, string>{
-        {CommuteMethod.walk,"W" },
-        {CommuteMethod.cycle, "C" },
-        {CommuteMethod.car, "A" },
-        {CommuteMethod.bus, "B" },
-        {CommuteMethod.train, "T" }
-    };
-
-    #region Generation.
+    #region Module Generation
     public void Start() {
         // Assign icons to buttons and send it to the logfile.
         AssignButtons();
@@ -57,9 +51,7 @@ public class CommuteModule : MonoBehaviour {
                 assignments += i.ToString() + ":" + ((CommuteMethod) r).ToString() + ", ";
 
                 // Change the button's physical appearance.
-                // TODO Switch from text meshes to some other type of rendering.
-                TextMesh buttonText = Buttons[i].GetComponentInChildren<TextMesh>();
-                buttonText.text = materialMap[assignedButtons[i]];
+                Buttons[i].GetComponentInChildren<MeshRenderer>().material.mainTexture = ButtonTextures[r];
 
                 // Don't know why, but we 100% need a local inside-the-loop variable to pass to ButtonPress
                 int j = i;
@@ -72,7 +64,7 @@ public class CommuteModule : MonoBehaviour {
 
     #endregion
 
-    #region solutionChecking
+    #region Solution Checking
 
     /// <summary>
     /// Check which button is correct for Stage 1
@@ -262,10 +254,12 @@ public class CommuteModule : MonoBehaviour {
                     if(buttonIndex == check) {
                         stage++;
                         FormatAndLog(buttonIndex + " pressed. Correct!");
+                        ChangeLight(1, Color.green);
                         stage1solution = check;
                         return;
                     }
                     FormatAndLog(buttonIndex + " pressed, expected " + stage1solution + ". Incorrect. Strike!");
+                    ChangeLight(1, Color.red);
                     Module.HandleStrike();
                     return;
                 case 2:
@@ -275,11 +269,13 @@ public class CommuteModule : MonoBehaviour {
                             FormatAndLog(buttonIndex + " pressed. Correct!");
                         }
                         FormatAndLog("Stage two completed, module disarmed.");
+                        ChangeLight(2, Color.green);
                         Module.HandlePass();
                         isActive = false;
                         return;
                     }
                     FormatAndLog(buttonIndex + " pressed, expected " + check + ". Incorrect. Strike!");
+                    ChangeLight(2, Color.red);
                     Module.HandleStrike();
                     return;
                 default:
@@ -293,6 +289,8 @@ public class CommuteModule : MonoBehaviour {
         FormatAndLog("Pressed while inactive, ignoring.");
     }
 
+
+    #region helpers
     private void FormatAndLog( string log, bool error = false) {
         if(error) {
             Debug.LogError("[Commute]" + log + "\n");
@@ -300,4 +298,25 @@ public class CommuteModule : MonoBehaviour {
             Debug.Log("[Commute]" + log + "\n");
         }
     }
+
+    /// <summary>
+    /// Change the stage LEDs.
+    /// </summary>
+    /// <param name="stage">Which LED to change (1 = left, 2 = right)</param>
+    /// <param name="color">To which colour to change.</param>
+    private void ChangeLight(int stage, Color color ) {
+        MeshRenderer mr = LEDs[stage - 1].GetComponentInChildren<MeshRenderer>();
+        Light l = LEDs[stage - 1].GetComponentInChildren<Light>(true);
+        l.enabled = true;
+        l.color = color;
+        if(color == Color.red) {
+            mr.material.mainTexture = LedTextures[1];
+        } else if(color == Color.green) {
+            mr.material.mainTexture = LedTextures[2];
+        } else {
+            mr.material.mainTexture = LedTextures[0];
+            l.enabled = false;
+        }
+    }
+    #endregion
 }

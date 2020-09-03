@@ -1,0 +1,186 @@
+fileFormatVersion: 2
+guid: fa4bd0a295db1a446a2a8fba295090fa
+ModelImporter:
+  serializedVersion: 22
+  fileIDToRecycleName:
+    100000: Component_PuzzleBackground
+    100002: ComponentKeypad
+    100004: //RootNode
+    100006: key
+    100008: key 1
+    100010: key 2
+    100012: key 3
+    100014: Key_BL
+    100016: Key_BR
+    100018: Key_TL
+    100020: Key_TR
+    100022: LED Left
+    100024: LED Right
+    100026: PuzzleBackground
+    100028: RecessedInner
+    400000: Component_PuzzleBackground
+    400002: ComponentKeypad
+    400004: //RootNode
+    400006: key
+    400008: key 1
+    400010: key 2
+    400012: key 3
+    400014: Key_BL
+    400016: Key_BR
+    400018: Key_TL
+    400020: Key_TR
+    400022: LED Left
+    400024: LED Right
+    400026: PuzzleBackground
+    400028: RecessedInner
+    2100000: 'Material #25'
+    2100002: Component_Keypad_mat
+    2100004: 'Material #27'
+    2100006: Component_Keypad_Background_mat1
+    2100008: Component_PuzzleBack_mat
+    2100010: 'Material #28'
+    2100012: 'Material #30'
+    2300000: Component_PuzzleBackground
+    2300002: key
+    2300004: key 1
+    2300006: key 2
+    2300008: key 3
+    2300010: LED Left
+    2300012: LED Right
+    2300014: PuzzleBackground
+    2300016: RecessedInner
+    3300000: Component_PuzzleBackground
+    3300002: key
+    3300004: key 1
+    3300006: key 2
+    3300008: key 3
+    3300010: LED Left
+    3300012: LED Right
+    3300014: PuzzleBackground
+    3300016: RecessedInner
+    4300000: key
+    4300002: key
+    4300004: key
+    4300006: key
+    4300008: PuzzleBackground
+    4300010: RecessedInner
+    4300012: Component_PuzzleBackground
+    4300014: LED Left
+    4300016: LED Right
+    7400000: Take 001
+    9500000: //RootNode
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Component_Keypad_Background_mat1
+    second: {fileID: 2100000, guid: b8425dddbc121144facea9503dabae12, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Component_Keypad_mat
+    second: {fileID: 2100000, guid: d7ecdea8ebdcaa045b30e1bb20f5c809, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Component_PuzzleBack_mat
+    second: {fileID: 2100000, guid: e62c0fcb437aa824ba756f59cedc5658, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: 'Material #25'
+    second: {fileID: 2100000, guid: 93bb8c47007b11b408b978a78e787f50, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: 'Material #27'
+    second: {fileID: 2100000, guid: 73c767198f8acae4a812a39f61d94df7, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: 'Material #28'
+    second: {fileID: 2100000, guid: 62de7630ff2ca634ab2b714adc7cb3db, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: 'Material #30'
+    second: {fileID: 2100000, guid: 5114d4e40533f4e4aab75c4a6a4adb41, type: 2}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 0
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 0.0025
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 0
+    importBlendShapes: 1
+    importCameras: 0
+    importLights: 0
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 0
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 2
+    normalCalculationMode: 4
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 1
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
