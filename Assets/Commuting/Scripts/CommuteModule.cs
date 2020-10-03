@@ -18,8 +18,13 @@ public class CommuteModule : MonoBehaviour {
     private enum CommuteMethod { walk, cycle, car, bus, train };
     private readonly int numDiffMethods = System.Enum.GetValues(typeof(CommuteMethod)).Length;
 
+    private static int moduleCount = 0;
+    private int moduleID;
+
     #region Module Generation
     public void Start() {
+        moduleID = moduleCount;
+        moduleCount++;
         // Assign icons to buttons and send it to the logfile.
         AssignButtons();
         stage = 1;
@@ -32,9 +37,7 @@ public class CommuteModule : MonoBehaviour {
     /// <summary>
     /// This method is called by Start and assigns the icons to the buttons.
     /// </summary>
-    /// <returns>A loggable string of assigned buttons.</returns>
     private void AssignButtons() {
-        string assignments = "Initialised -- Assigned buttons: ";
         int r;
         for(int i = 0; i < Buttons.Length; i++) {
             r = Random.Range(0, numDiffMethods);
@@ -48,7 +51,6 @@ public class CommuteModule : MonoBehaviour {
                 // Nope, this one is available.
                 // Register this button.
                 assignedButtons.Add((CommuteMethod) r);
-                assignments += i.ToString() + ":" + ((CommuteMethod) r).ToString() + ", ";
 
                 // Change the button's physical appearance.
                 Buttons[i].GetComponentInChildren<MeshRenderer>().material.mainTexture = ButtonTextures[r];
@@ -58,8 +60,10 @@ public class CommuteModule : MonoBehaviour {
                 Buttons[i].OnInteract += delegate () { ButtonPress(j); return false; };
             }
         }
-        // Remove the last comma-space
-        FormatAndLog(assignments.Substring(0, assignments.Length - 2));
+        // Log.
+        FormatAndLog("Initialised -- Assigned buttons: \n[" +
+            assignedButtons[0].ToString() + "] [" + assignedButtons[1].ToString() + "]\n[" + 
+            assignedButtons[2].ToString() + "] [" + assignedButtons[3].ToString() + "]");
     }
 
     #endregion
@@ -90,17 +94,17 @@ public class CommuteModule : MonoBehaviour {
         }
 
         if(BombInfo.IsIndicatorOn("CAR") && assignedButtons.Contains(CommuteMethod.car)) {
-            FormatAndLog("Stage 1: lit CAR, drive to work.Button " + assignedButtons.IndexOf(CommuteMethod.car));
+            FormatAndLog("Stage 1: lit CAR, drive to work. -- Correct: " + assignedButtons.IndexOf(CommuteMethod.car));
             return assignedButtons.IndexOf(CommuteMethod.car);
         }
         
         if(BombInfo.IsPortPresent(Port.StereoRCA) && assignedButtons.Contains(CommuteMethod.cycle)) {
-            FormatAndLog("Stage 1: RCA plug, cycle to work. Button " + assignedButtons.IndexOf(CommuteMethod.cycle));
+            FormatAndLog("Stage 1: RCA plug, cycle to work. -- Correct: " + assignedButtons.IndexOf(CommuteMethod.cycle));
             return assignedButtons.IndexOf(CommuteMethod.cycle);
         }
         
         if(assignedButtons.Contains(CommuteMethod.walk)) {
-            FormatAndLog("Stage 1: Walk to work. Button " + assignedButtons.IndexOf(CommuteMethod.walk));
+            FormatAndLog("Stage 1: Walk to work. -- Correct: " + assignedButtons.IndexOf(CommuteMethod.walk));
             return assignedButtons.IndexOf(CommuteMethod.walk);
         }
 
@@ -133,20 +137,20 @@ public class CommuteModule : MonoBehaviour {
         if(assignedButtons.Contains(CommuteMethod.walk)
             && assignedButtons.Contains(CommuteMethod.cycle)
             && stage1solution == assignedButtons.IndexOf(CommuteMethod.walk)) {
-            FormatAndLog("Getting that exercise! Cycle home. Button " + assignedButtons.IndexOf(CommuteMethod.cycle));
+            FormatAndLog("Getting that exercise! Cycle home. -- Correct: " + assignedButtons.IndexOf(CommuteMethod.cycle));
             return assignedButtons.IndexOf(CommuteMethod.cycle);
         }
 
         // If you drove to work, take the car back.
         if(assignedButtons.Contains(CommuteMethod.car)
            && stage1solution == assignedButtons.IndexOf(CommuteMethod.car)) {
-            FormatAndLog("We drove to work, driving back from parking lot " + assignedButtons.IndexOf(CommuteMethod.car));
+            FormatAndLog("We drove to work, driving back. -- Correct: " + assignedButtons.IndexOf(CommuteMethod.car));
             return stage1solution;
         }
 
         //Otherwise, go by train.
         if(assignedButtons.Contains(CommuteMethod.train)) {
-            FormatAndLog("We didn't drive to work, taking train " + assignedButtons.IndexOf(CommuteMethod.train));
+            FormatAndLog("We didn't drive to work, taking train. -- Correct: " + assignedButtons.IndexOf(CommuteMethod.train));
             return assignedButtons.IndexOf(CommuteMethod.train);
         }
 
@@ -154,7 +158,7 @@ public class CommuteModule : MonoBehaviour {
         if(assignedButtons.Contains(CommuteMethod.bus)
            && stage1solution == assignedButtons.IndexOf(CommuteMethod.bus)
            && assignedButtons.Contains(CommuteMethod.walk)) {
-            FormatAndLog("We took the bus to work, walking home with button " + assignedButtons.IndexOf(CommuteMethod.bus));
+            FormatAndLog("We took the bus to work, walking home. -- Correct: " + assignedButtons.IndexOf(CommuteMethod.bus));
             return assignedButtons.IndexOf(CommuteMethod.walk);
         }
 
@@ -163,7 +167,7 @@ public class CommuteModule : MonoBehaviour {
            && stage1solution == assignedButtons.IndexOf(CommuteMethod.train)
            && BombInfo.GetTime() > 300f
            && assignedButtons.Contains(CommuteMethod.bus)) {
-            FormatAndLog("We have a train ticket and there's more than 5 minutes left, ride the bus on button " + assignedButtons.IndexOf(CommuteMethod.bus));
+            FormatAndLog("We have a train ticket and there's more than 5 minutes left, ride the bus. -- Correct: " + assignedButtons.IndexOf(CommuteMethod.bus));
             return assignedButtons.IndexOf(CommuteMethod.bus);
         }
         return CheckImportantSection();
@@ -179,7 +183,7 @@ public class CommuteModule : MonoBehaviour {
            && stage1solution == assignedButtons.IndexOf(CommuteMethod.train)
            && BombInfo.GetTime() > 300f
            && assignedButtons.Contains(CommuteMethod.bus)) {
-            FormatAndLog("We have a train ticket and there's more than 5 minutes left, ride the bus on button " + assignedButtons.IndexOf(CommuteMethod.bus));
+            FormatAndLog("We have a train ticket and there's more than 5 minutes left, ride the bus. -- Correct: " + assignedButtons.IndexOf(CommuteMethod.bus));
             return assignedButtons.IndexOf(CommuteMethod.bus);
         }
         
@@ -187,19 +191,19 @@ public class CommuteModule : MonoBehaviour {
         if(assignedButtons.Contains(CommuteMethod.bus)
            && stage1solution == assignedButtons.IndexOf(CommuteMethod.bus)
            && assignedButtons.Contains(CommuteMethod.walk)) {
-            FormatAndLog("We took the bus to work, walking home with button " + assignedButtons.IndexOf(CommuteMethod.walk));
+            FormatAndLog("We took the bus to work, walking home. -- Correct: " + assignedButtons.IndexOf(CommuteMethod.walk));
             return assignedButtons.IndexOf(CommuteMethod.walk);
         }
         
         // If you drove to work, take the car back.
         if(assignedButtons.Contains(CommuteMethod.car) && stage1solution == assignedButtons.IndexOf(CommuteMethod.car)) {
-            FormatAndLog("We drove to work, driving back from parking lot " + assignedButtons.IndexOf(CommuteMethod.car));
+            FormatAndLog("We drove to work, driving back. -- Correct: " + assignedButtons.IndexOf(CommuteMethod.car));
             return stage1solution;
         }
         
         //Otherwise, go by train.
         if(assignedButtons.Contains(CommuteMethod.train)) {
-            FormatAndLog("We didn't drive to work, taking train " + assignedButtons.IndexOf(CommuteMethod.train));
+            FormatAndLog("We didn't drive to work, taking train -- Correct: " + assignedButtons.IndexOf(CommuteMethod.train));
             return assignedButtons.IndexOf(CommuteMethod.train);
         }
         
@@ -207,7 +211,7 @@ public class CommuteModule : MonoBehaviour {
         if(assignedButtons.Contains(CommuteMethod.walk)
            && assignedButtons.Contains(CommuteMethod.cycle)
            && stage1solution == assignedButtons.IndexOf(CommuteMethod.walk)) {
-            FormatAndLog("Getting that exercise! Cycle home. Button "+assignedButtons.IndexOf(CommuteMethod.cycle));
+            FormatAndLog("Getting that exercise! Cycle home. -- Correct: " + assignedButtons.IndexOf(CommuteMethod.cycle));
             return assignedButtons.IndexOf(CommuteMethod.cycle);
         }
         
@@ -220,20 +224,27 @@ public class CommuteModule : MonoBehaviour {
     /// <returns></returns>
     private int CheckImportantSection() {
         //Important: If at any point in time none of the rules apply, press the top left* button
+        string log = "Important: Press the... ";
         int ret = 0;
         //unless the serial number has a vowel in it, then press the bottom left* button.
         List<char> vowels = new List<char> { 'A', 'E', 'I', 'O', 'U' };
         foreach(char c in BombInfo.GetSerialNumberLetters()) {
             if(vowels.Contains(c)) {
+                log += "bottom-";
                 ret = 2;
+            } else {
+                log += "top-";
             }
         }
         //*) If the amount of minutes remaining is even, use the right button instead.
         int minutes = Mathf.FloorToInt(BombInfo.GetTime() / 60f);
         if(minutes % 2 == 0) {
+            log += "right";
             ret++;
+        } else {
+            log += "left";
         }
-        FormatAndLog("None of the rules applied, so press button " + ret);
+        FormatAndLog(log + " button. (ID: " + ret + ")");
         return ret;
     }
 
@@ -293,9 +304,9 @@ public class CommuteModule : MonoBehaviour {
     #region helpers
     private void FormatAndLog( string log, bool error = false) {
         if(error) {
-            Debug.LogError("[Commute]" + log + "\n");
+            Debug.LogError("[Commute #" + moduleID + "]" + log + "\n");
         } else {
-            Debug.Log("[Commute]" + log + "\n");
+            Debug.Log("[Commute #" + moduleID + "]" + log + "\n");
         }
     }
 
