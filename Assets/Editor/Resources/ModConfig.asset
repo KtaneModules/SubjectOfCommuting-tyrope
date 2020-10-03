@@ -18,6 +18,6 @@ MonoBehaviour:
     the wrong choice has larger consequences than simply missing a meeting.
 
 '
-  version: 1.0
+  version: 1.0.1
   outputFolder: build
   previewImage: {fileID: 2800000, guid: 487ece8f9c8ad3640bc124a9aee25367, type: 3}
