@@ -14,10 +14,17 @@ MonoBehaviour:
   id: commuting
   title: Commuting
   author: Tyrope
-  description: 'Getting to and from work is a fairly mundane choice, until making
-    the wrong choice has larger consequences than simply missing a meeting.
+  description: 'Getting to and from work is a fairly mundane choice, until making the wrong choice has larger consequences than simply missing a meeting.
 
-'
+Manual page: [url]https://ktane.timwi.de/HTML/Commuting.html[/url]
+
+Initial idea maker & byte wrangler: [url=https://steamcommunity.com/id/Tyrope/]Tyrope[/url]
+3D witchcraft practitioner: [url=https://steamcommunity.com/id/Danish_Viking_King]Søren[/url]
+Iconographer: [url=https://steamcommunity.com/id/GamingWithJanko/]JGD[/url]
+
+Special thanks to my beta testers:
+[url=https://steamcommunity.com/id/alexyvontripp]Alexy[/url]
+TheGamingRogue from the KTANE Discord'
   version: 1.0.1
   outputFolder: build
   previewImage: {fileID: 2800000, guid: 487ece8f9c8ad3640bc124a9aee25367, type: 3}
