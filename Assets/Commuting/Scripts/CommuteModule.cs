@@ -300,6 +300,47 @@ public class CommuteModule : MonoBehaviour {
         FormatAndLog("Pressed while inactive, ignoring.");
     }
 
+    #region TwitchPlays
+    public string TwitchManualCode = "Commuting";
+    public string TwitchHelpMessage = "Press a button using \"!{0} input\", or both stages using \"!{0} input input\". valid inputs: topleft, topright, bottomleft, bottomright, TL, TR, BL, BR";
+
+    /// <summary>
+    /// TwitchPlays incoming chat message for us.
+    /// see: https://github.com/samfundev/KtaneTwitchPlays/wiki/External-Mod-Module-Support#simple-implementation
+    /// </summary>
+    /// <param name="command">The chat message</param>
+    /// <returns>The button(s) to push, or null to ignore.</returns>
+    public KMSelectable[] ProcessTwitchCommand( string command ) {
+        // Multipress.
+        if(command.Contains(' ')) {
+            KMSelectable btn1 = GetButtonFromTPInput(command.Split(' ')[0]);
+            KMSelectable btn2 = GetButtonFromTPInput(command.Split(' ')[1]);
+            if(btn1 || btn2 == null) {
+                return null;
+            }
+            return new KMSelectable[] { btn1, btn2 };
+        }
+
+        //Single press
+        KMSelectable btn = GetButtonFromTPInput(command);
+        if(btn == null) {
+            return null;
+        } else {
+            return new KMSelectable[] { btn };
+        }
+    }
+
+    /// <summary>
+    /// Handle admins force solving the module.
+    /// </summary>
+    public void TwitchHandleForcedSolve() {
+        if(isActive == false) { return; }
+        ChangeLight(1, Color.green);
+        ChangeLight(2, Color.green);
+        Module.HandlePass();
+        isActive = false;
+    }
+    #endregion
 
     #region helpers
     private void FormatAndLog( string log, bool error = false) {
@@ -327,6 +368,30 @@ public class CommuteModule : MonoBehaviour {
         } else {
             mr.material.mainTexture = LedTextures[0];
             l.enabled = false;
+        }
+    }
+
+    /// <summary>
+    /// Grab the correct KMSelectable based on a string, used in Twitch Plays implementation
+    /// </summary>
+    /// <param name="input">case-insensitive string indicating a button position.</param>
+    /// <returns>the button that represents this position, or null if invalid string.</returns>
+    KMSelectable GetButtonFromTPInput( string input ) {
+        switch(input.ToLower()) {
+            case "topleft":
+            case "tl":
+                return Buttons[0];
+            case "topright":
+            case "tr":
+                return Buttons[1];
+            case "bottomleft":
+            case "bl":
+                return Buttons[2];
+            case "bottomright":
+            case "br":
+                return Buttons[3];
+            default:
+                return null;
         }
     }
     #endregion
