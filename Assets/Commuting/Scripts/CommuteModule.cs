@@ -304,9 +304,9 @@ public class CommuteModule : MonoBehaviour {
     #region helpers
     private void FormatAndLog( string log, bool error = false) {
         if(error) {
-            Debug.LogError("[Commute #" + moduleID + "]" + log + "\n");
+            Debug.LogError("[Commuting #" + moduleID + "]" + log );
         } else {
-            Debug.Log("[Commute #" + moduleID + "]" + log + "\n");
+            Debug.Log("[Commuting #" + moduleID + "]" + log );
         }
     }
 
