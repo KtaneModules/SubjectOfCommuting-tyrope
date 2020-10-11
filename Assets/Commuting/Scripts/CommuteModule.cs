@@ -311,23 +311,28 @@ public class CommuteModule : MonoBehaviour {
     /// <param name="command">The chat message</param>
     /// <returns>The button(s) to push, or null to ignore.</returns>
     public KMSelectable[] ProcessTwitchCommand( string command ) {
-        // Multipress.
+        // Prepare the return values.
+        List<KMSelectable> ret = new List<KMSelectable>();
+
+        // Is this a multipress?
         if(command.Contains(' ')) {
-            KMSelectable btn1 = GetButtonFromTPInput(command.Split(' ')[0]);
-            KMSelectable btn2 = GetButtonFromTPInput(command.Split(' ')[1]);
-            if(btn1 || btn2 == null) {
-                return null;
-            }
-            return new KMSelectable[] { btn1, btn2 };
+            // Yup, split the input.
+            ret.Add(GetButtonFromTPInput(command.Split(' ')[0]));
+            ret.Add(GetButtonFromTPInput(command.Split(' ')[1]));
+        } else {
+            // No, use input as-is.
+            ret.Add(GetButtonFromTPInput(command));
         }
 
-        //Single press
-        KMSelectable btn = GetButtonFromTPInput(command);
-        if(btn == null) {
-            return null;
-        } else {
-            return new KMSelectable[] { btn };
+        // Ensure we don't have invalid buttons.
+        foreach(KMSelectable btn in ret) {
+            if(btn == null) {
+                return null;
+            }
         }
+
+        // Return the buttons to push.
+        return ret.ToArray();
     }
 
     /// <summary>
