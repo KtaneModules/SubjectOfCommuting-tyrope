@@ -61,9 +61,9 @@ public class CommuteModule : MonoBehaviour {
             }
         }
         // Log.
-        FormatAndLog("Initialised -- Assigned buttons: \n[" +
-            assignedButtons[0].ToString() + "] [" + assignedButtons[1].ToString() + "]\n[" + 
-            assignedButtons[2].ToString() + "] [" + assignedButtons[3].ToString() + "]");
+        FormatAndLog("Initialised -- Assigned buttons: [" + assignedButtons[0].ToString() + 
+            "] [" + assignedButtons[1].ToString() + "] [" + assignedButtons[2].ToString() +
+            "] [" + assignedButtons[3].ToString() + "]");
     }
 
     #endregion
@@ -232,9 +232,11 @@ public class CommuteModule : MonoBehaviour {
             if(vowels.Contains(c)) {
                 log += "bottom-";
                 ret = 2;
-            } else {
-                log += "top-";
+                break;
             }
+        }
+        if(ret != 2) {
+            log += "top-";
         }
         //*) If the amount of minutes remaining is even, use the right button instead.
         int minutes = Mathf.FloorToInt(BombInfo.GetTime() / 60f);
@@ -269,7 +271,7 @@ public class CommuteModule : MonoBehaviour {
                         stage1solution = check;
                         return;
                     }
-                    FormatAndLog(buttonIndex + " pressed, expected " + stage1solution + ". Incorrect. Strike!");
+                    FormatAndLog(buttonIndex + " pressed, expected " + check + ". Incorrect. Strike!");
                     ChangeLight(1, Color.red);
                     Module.HandleStrike();
                     return;
