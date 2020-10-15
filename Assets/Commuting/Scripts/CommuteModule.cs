@@ -315,15 +315,23 @@ public class CommuteModule : MonoBehaviour {
     public KMSelectable[] ProcessTwitchCommand( string command ) {
         // Prepare the return values.
         List<KMSelectable> ret = new List<KMSelectable>();
+        string btns;
+
+        // The player may have typed !# press IDENTIFIERS, this isn't required nor in the helptext, but should be allowed.
+        if(command.StartsWith("press ")) {
+            btns = command.Substring(6);
+        } else {
+            btns = command;
+        }
 
         // Is this a multipress?
-        if(command.Contains(' ')) {
+        if(btns.Contains(' ')) {
             // Yup, split the input.
-            ret.Add(GetButtonFromTPInput(command.Split(' ')[0]));
-            ret.Add(GetButtonFromTPInput(command.Split(' ')[1]));
+            ret.Add(GetButtonFromTPInput(btns.Split(' ')[0]));
+            ret.Add(GetButtonFromTPInput(btns.Split(' ')[1]));
         } else {
             // No, use input as-is.
-            ret.Add(GetButtonFromTPInput(command));
+            ret.Add(GetButtonFromTPInput(btns));
         }
 
         // Ensure we don't have invalid buttons.
@@ -332,6 +340,13 @@ public class CommuteModule : MonoBehaviour {
                 return null;
             }
         }
+
+        // Log the opening command and final button presses, just in case.
+        List<string> buttonNames = new List<string>();
+        foreach(KMSelectable km in ret) {
+            buttonNames.Add(km.name);
+        }
+        FormatAndLog("TwitchPlays: " + command + " => " + buttonNames.Join(", "));
 
         // Return the buttons to push.
         return ret.ToArray();
