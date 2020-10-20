@@ -21,10 +21,18 @@ public class CommuteModule : MonoBehaviour {
     private static int moduleCount = 0;
     private int moduleID;
 
+    private static bool bombIsZen = false;
+
     #region Module Generation
     public void Start() {
-        moduleID = moduleCount;
+        if(moduleCount == 0){
+            // We're the first module, so we get the honour of testing for Zen Mode.
+            if(BombInfo.GetTime() == 0f){
+                bombIsZen = true;
+            }
+        }
         moduleCount++;
+        moduleID = moduleCount;
         // Assign icons to buttons and send it to the logfile.
         AssignButtons();
         stage = 1;
@@ -65,11 +73,9 @@ public class CommuteModule : MonoBehaviour {
             "] [" + assignedButtons[1].ToString() + "] [" + assignedButtons[2].ToString() +
             "] [" + assignedButtons[3].ToString() + "]");
     }
-
     #endregion
 
     #region Solution Checking
-
     /// <summary>
     /// Check which button is correct for Stage 1
     /// </summary>
@@ -87,7 +93,7 @@ public class CommuteModule : MonoBehaviour {
             FormatAndLog("Stage 1: Unlit BOB, go to work by bus. -- Correct: " + assignedButtons.IndexOf(CommuteMethod.bus));
             return assignedButtons.IndexOf(CommuteMethod.bus);
         }
-        
+
         if(BombInfo.GetBatteryCount() > 2 && assignedButtons.Contains(CommuteMethod.train)) {
             FormatAndLog("Stage 1: 3 or more batteries, go to work by train. -- Correct: " + assignedButtons.IndexOf(CommuteMethod.train));
             return assignedButtons.IndexOf(CommuteMethod.train);
@@ -97,12 +103,12 @@ public class CommuteModule : MonoBehaviour {
             FormatAndLog("Stage 1: lit CAR, drive to work. -- Correct: " + assignedButtons.IndexOf(CommuteMethod.car));
             return assignedButtons.IndexOf(CommuteMethod.car);
         }
-        
+
         if(BombInfo.IsPortPresent(Port.StereoRCA) && assignedButtons.Contains(CommuteMethod.cycle)) {
             FormatAndLog("Stage 1: RCA plug, cycle to work. -- Correct: " + assignedButtons.IndexOf(CommuteMethod.cycle));
             return assignedButtons.IndexOf(CommuteMethod.cycle);
         }
-        
+
         if(assignedButtons.Contains(CommuteMethod.walk)) {
             FormatAndLog("Stage 1: Walk to work. -- Correct: " + assignedButtons.IndexOf(CommuteMethod.walk));
             return assignedButtons.IndexOf(CommuteMethod.walk);
@@ -165,7 +171,7 @@ public class CommuteModule : MonoBehaviour {
         // If you have a train ticket and there’s more than 5 minutes left on the bomb, ride the bus.
         if(assignedButtons.Contains(CommuteMethod.train)
            && stage1solution == assignedButtons.IndexOf(CommuteMethod.train)
-           && BombInfo.GetTime() > 300f
+           && (BombInfo.GetTime() > 300f || bombIsZen)
            && assignedButtons.Contains(CommuteMethod.bus)) {
             FormatAndLog("We have a train ticket and there's more than 5 minutes left, ride the bus. -- Correct: " + assignedButtons.IndexOf(CommuteMethod.bus));
             return assignedButtons.IndexOf(CommuteMethod.bus);
@@ -181,12 +187,12 @@ public class CommuteModule : MonoBehaviour {
         // If you have a train ticket and there’s more than 5 minutes left on the bomb, ride the bus.
         if(assignedButtons.Contains(CommuteMethod.train)
            && stage1solution == assignedButtons.IndexOf(CommuteMethod.train)
-           && BombInfo.GetTime() > 300f
+           && (BombInfo.GetTime() > 300f || bombIsZen)
            && assignedButtons.Contains(CommuteMethod.bus)) {
             FormatAndLog("We have a train ticket and there's more than 5 minutes left, ride the bus. -- Correct: " + assignedButtons.IndexOf(CommuteMethod.bus));
             return assignedButtons.IndexOf(CommuteMethod.bus);
         }
-        
+
         // If you took the bus to work, walk home.
         if(assignedButtons.Contains(CommuteMethod.bus)
            && stage1solution == assignedButtons.IndexOf(CommuteMethod.bus)
@@ -194,19 +200,19 @@ public class CommuteModule : MonoBehaviour {
             FormatAndLog("We took the bus to work, walking home. -- Correct: " + assignedButtons.IndexOf(CommuteMethod.walk));
             return assignedButtons.IndexOf(CommuteMethod.walk);
         }
-        
+
         // If you drove to work, take the car back.
         if(assignedButtons.Contains(CommuteMethod.car) && stage1solution == assignedButtons.IndexOf(CommuteMethod.car)) {
             FormatAndLog("We drove to work, driving back. -- Correct: " + assignedButtons.IndexOf(CommuteMethod.car));
             return stage1solution;
         }
-        
+
         //Otherwise, go by train.
         if(assignedButtons.Contains(CommuteMethod.train)) {
             FormatAndLog("We didn't drive to work, taking train -- Correct: " + assignedButtons.IndexOf(CommuteMethod.train));
             return assignedButtons.IndexOf(CommuteMethod.train);
         }
-        
+
         //If you walked to work, cycle home.
         if(assignedButtons.Contains(CommuteMethod.walk)
            && assignedButtons.Contains(CommuteMethod.cycle)
@@ -214,7 +220,7 @@ public class CommuteModule : MonoBehaviour {
             FormatAndLog("Getting that exercise! Cycle home. -- Correct: " + assignedButtons.IndexOf(CommuteMethod.cycle));
             return assignedButtons.IndexOf(CommuteMethod.cycle);
         }
-        
+
         return CheckImportantSection();
     }
 
@@ -238,7 +244,7 @@ public class CommuteModule : MonoBehaviour {
         if(ret != 2) {
             log += "top-";
         }
-        //*) If the amount of minutes remaining is even, use the right button instead.
+        //*) If the amount of minutes displayed is even, use the right button instead.
         int minutes = Mathf.FloorToInt(BombInfo.GetTime() / 60f);
         if(minutes % 2 == 0) {
             log += "right";
@@ -249,7 +255,6 @@ public class CommuteModule : MonoBehaviour {
         FormatAndLog(log + " button. (ID: " + ret + ")");
         return ret;
     }
-
     #endregion
 
     /// <summary>
@@ -418,3 +423,4 @@ public class CommuteModule : MonoBehaviour {
     }
     #endregion
 }
+
