@@ -22,6 +22,6 @@ MonoBehaviour:
     [url=https://steamcommunity.com/id/GamingWithJanko/]JGD[/url]\n\nSpecial thanks
     to my beta testers: [url=https://steamcommunity.com/id/alexyvontripp]Alexy[/url]\nTheGamingRogue
     from the KTANE Discord"
-  version: 1.1.1
+  version: 1.1.2
   outputFolder: build
   previewImage: {fileID: 2800000, guid: 487ece8f9c8ad3640bc124a9aee25367, type: 3}
